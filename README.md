@@ -24,43 +24,62 @@ Generate SSL Certificate:
 
 Use Certbot to obtain an SSL certificate for your domain:
 
-```sudo certbot certonly --nginx -d your-domain.com -d www.your-domain.com```
+```
+sudo certbot certonly --nginx -d your-domain.com -d www.your-domain.com
+```
 
 Follow the prompts to complete the certificate setup.
 
 Step 4: Set Up the Application
 
 Create a directory for your project:
+```
 mkdir ~/WebRTC-SRT-cloud-ready
+```
 
 Clone the Git Repository:
-git clone https://github.com/your-github-username/your-repository-name.git ~/WebRTC-SRT-cloud-ready
+```
+git clone https://github.com/AVStreamAI/WebRTC-to-SRT-mixes-cloud.git ~/WebRTC-SRT-cloud-ready
+```
 
 Navigate to the Project Folder:
+```
 cd ~/WebRTC-SRT-cloud-ready
+```
+
 Install Project Dependencies:
 
 Run the setup command to install all necessary dependencies:
+```
 npm run setup
+```
 
 Step 5: Configure Firewall (UFW)
 Open Required Ports:
+```
 sudo ufw allow 8080
 sudo ufw allow 443
 sudo ufw allow 5173
 sudo ufw allow SRT OUTPUT PORTS YOU WANT
 sudo ufw enable
+```
 
 Step 6: Start the Application
+```
 npm run dev
+```
 
 (Optional) Use PM2 for Background Running:
 
 To keep the application running after you log out, use PM2:
+```
 pm2 start npm --name "webrtc-app" -- run dev
+```
 Save the PM2 configuration to start on reboot:
+```
 pm2 save
 pm2 startup
+```
 
 Once deployed, access your application using your domain:
 
