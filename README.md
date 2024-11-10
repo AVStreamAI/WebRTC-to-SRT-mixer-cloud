@@ -6,7 +6,7 @@ This is prealpha version 0.0.1 from 10.11.2024
 
 ## Prerequisites
 1. Domain Name: register a domain name for your application.
-2. Cloud Server: rent a cloud server or use a local server running Ubuntu 22.04.
+2. Cloud Server: rent a cloud server or use a local server running Ubuntu 24.04.
 
 ## Installation Guide
 
