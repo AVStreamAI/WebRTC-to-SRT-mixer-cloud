@@ -16,7 +16,7 @@ Step 2: Access the Server
 
 Step 3: Install Certbot for SSL Certificate
 
-sudo apt install certbot nginx -y
+'''sudo apt install certbot nginx -y'''
 
 Generate SSL Certificate:
 
