@@ -7,7 +7,7 @@ Deploy this project on your own domain to stream WebRTC sources (camera and micr
 1. Domain Name: register a domain name for your application.
 2. Cloud Server: rent a cloud server or use a local server running Ubuntu 22.04.
 
-##Installation Guide
+## Installation Guide
 
 Step 1: Set Up Your Domain
 - Configure DNS: create an A record in your DNS settings, pointing your domain name to your server’s IP address.
