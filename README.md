@@ -10,7 +10,7 @@ Deploy this project on your own domain to stream WebRTC sources (camera and micr
 ## Installation Guide
 
 Step 1: Set Up Your Domain
-- Configure DNS: create an A record in your DNS settings, pointing your domain name to your server’s IP address.
+Configure DNS: create an A record in your DNS settings, pointing your domain name to your server’s IP address.
 
 Step 2: Access the Server
 
@@ -24,7 +24,7 @@ Generate SSL Certificate:
 
 Use Certbot to obtain an SSL certificate for your domain:
 
-sudo certbot certonly --nginx -d your-domain.com -d www.your-domain.com
+```sudo certbot certonly --nginx -d your-domain.com -d www.your-domain.com```
 
 Follow the prompts to complete the certificate setup.
 
