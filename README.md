@@ -1,5 +1,6 @@
 # Cloud-Based WebRTC-SRT Streaming Application
 Deploy this project on your own domain to stream WebRTC sources (camera and microphone) via SRT protocol. Follow the steps below to set up your server and deploy the application.
+This is prealpha version 0.0.1 from 10.11.2024
 
 ![Demo Video](demo-video-2.gif)
 
