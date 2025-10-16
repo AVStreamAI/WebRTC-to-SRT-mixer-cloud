@@ -1,0 +1,87 @@
+# MediaMTX configuration for WebRTC-to-SRT mixer cloud deployment
+logLevel: info
+logDestinations: [stdout]
+readTimeout: 10s
+writeTimeout: 10s
+
+# Delegate authentication to the API service so we can validate ingest/output tokens.
+authMethod: http
+authHTTPAddress: http://api:3000/internal/mediamtx/auth
+authHTTPExclude:
+  - action: api
+  - action: metrics
+  - action: pprof
+
+# Enable introspection services for health and metrics scraping.
+api: yes
+apiAddress: :9997
+apiAllowOrigin: "*"
+
+metrics: yes
+metricsAddress: :9998
+metricsAllowOrigin: "*"
+
+pprof: no
+
+playback: no
+
+# Protocol servers that we actively use.
+rtsp: no
+rtmp: yes
+rtmpAddress: :1935
+rtmpEncryption: "no"
+
+hls: no
+
+webrtc: yes
+webrtcAddress: :8889
+webrtcEncryption: no
+# Allow the browser panel and reverse proxies to access WHEP.
+webrtcAllowOrigin: "*"
+# When served behind a reverse proxy, list additional public hostnames/IPs.
+webrtcAdditionalHosts: []
+webrtcLocalUDPAddress: :8189
+webrtcLocalTCPAddress: ''
+webrtcICEServers2:
+  - url: stun:stun.l.google.com:19302
+
+srt: yes
+srtAddress: :8000
+
+paths:
+  # Generic ingest mount that accepts RTMP, SRT, or WHIP and exposes WHEP playback.
+  "~^ingest/(?P<project>[a-zA-Z0-9_-]+)/(?P<input>[a-zA-Z0-9_-]+)$":
+    source: publisher
+    maxReaders: 0
+    overridePublisher: yes
+    srtPublishPassphrase: "${INGEST_SRT_PASSPHRASE}"
+    # Fire hooks so the API can react to ingest state changes.
+    runOnReady: >-
+      curl -sSf -X POST http://api:3000/internal/mediamtx/events \
+        -H 'Content-Type: application/json' \
+        -d '{"event":"INGEST_ONLINE","project":"$G1","name":"$G2","protocol":"$MTX_CONN_TYPE"}'
+    runOnReadyRestart: no
+    runOnNotReady: >-
+      curl -sSf -X POST http://api:3000/internal/mediamtx/events \
+        -H 'Content-Type: application/json' \
+        -d '{"event":"INGEST_OFFLINE","project":"$G1","name":"$G2"}'
+
+  # Mixer return feeds land here and can be monitored through WHEP.
+  "~^out/(?P<project>[a-zA-Z0-9_-]+)/(program|aux[1-7])$":
+    source: publisher
+    maxReaders: 0
+    overridePublisher: yes
+    srtPublishPassphrase: "${OUTPUT_SRT_PASSPHRASE}"
+    runOnReady: >-
+      curl -sSf -X POST http://api:3000/internal/mediamtx/events \
+        -H 'Content-Type: application/json' \
+        -d '{"event":"OUTPUT_ONLINE","project":"$G1","name":"$G2"}'
+    runOnReadyRestart: no
+    runOnNotReady: >-
+      curl -sSf -X POST http://api:3000/internal/mediamtx/events \
+        -H 'Content-Type: application/json' \
+        -d '{"event":"OUTPUT_OFFLINE","project":"$G1","name":"$G2"}'
+
+  # Allow MediaMTX to host recordings playback if we ever enable it.
+  all_others:
+    source: publisher
